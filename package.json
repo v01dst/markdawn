@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "fastify": "^5.12.1",
-    "marked": "^16.4.1",
+    "marked": "^18.0.11",
     "tsx": "^4.23.13"
   },
   "devDependencies": {
