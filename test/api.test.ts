@@ -17,7 +17,7 @@ describe("POST /render", () => {
     });
     expect(res.statusCode).toBe(200);
     const body = res.json();
-    expect(body.html).toContain("<h1>Hi</h1>");
+    expect(body.html).toContain("<h1 id=\"hi\">Hi</h1>");
     expect(body.bytes).toBeGreaterThan(0);
   });
 
@@ -28,7 +28,7 @@ describe("POST /render", () => {
       payload: "## from raw",
       headers: { "content-type": "text/plain" },
     });
-    expect(res.json().html).toContain("<h2>from raw</h2>");
+    expect(res.json().html).toMatch(/<h2 id="[^"]*">from raw<\/h2>/);
   });
 
   it("rejects empty markdown", async () => {

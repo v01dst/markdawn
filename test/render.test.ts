@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { renderMarkdown, renderPage } from "../src/render.js";
+import { renderMarkdown, renderPage, renderWithToc } from "../src/render.js";
 
 describe("renderMarkdown", () => {
   it("renders headings, bold and lists", () => {
@@ -82,5 +82,31 @@ describe("renderPage", () => {
     const page = renderPage("x", 'T<"e">st');
     expect(page).not.toContain('T<"e">st');
     expect(page).toContain("Test");
+  });
+});
+
+describe("renderWithToc", () => {
+  it("adds anchors and builds a toc", () => {
+    const { html, toc } = renderWithToc("# Intro\n\ntext\n\n## Setup\n\nmore\n\n## Setup\n\ndup");
+    expect(toc).toEqual([
+      { level: 1, text: "Intro", id: "intro" },
+      { level: 2, text: "Setup", id: "setup" },
+      { level: 2, text: "Setup", id: "setup-1" },
+    ]);
+    expect(html).toContain('<h1 id="intro">Intro</h1>');
+    expect(html).toContain('<h2 id="setup">Setup</h2>');
+    expect(html).toContain('<h2 id="setup-1">Setup</h2>');
+  });
+
+  it("ignores code blocks as headings", () => {
+    const { toc } = renderWithToc("```\n# not a heading\n```\n\n# Real");
+    expect(toc).toHaveLength(1);
+    expect(toc[0]!.text).toBe("Real");
+  });
+
+  it("handles unicode headings", () => {
+    const { html, toc } = renderWithToc("## Café & Thé");
+    expect(toc[0]!.id).toBe("caf-th");
+    expect(html).toContain('id="caf-th"');
   });
 });

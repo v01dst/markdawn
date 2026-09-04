@@ -75,3 +75,54 @@ ${html}
 </body>
 </html>`;
 }
+
+export interface TocEntry {
+  level: number;
+  text: string;
+  id: string;
+}
+
+/** Slugify a heading text for anchor ids. */
+function headingId(text: string): string {
+  return text
+    .replace(/&amp;/g, "")
+    .replace(/&lt;/g, "")
+    .replace(/&gt;/g, "")
+    .replace(/&quot;/g, "")
+    .replace(/&#39;/g, "")
+    .replace(/&[a-z]+;/gi, "")
+    .toLowerCase()
+    .replace(/<[^>]+>/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Render markdown, adding id anchors to h1-h4 headings and returning
+ * a table of contents.
+ */
+export function renderWithToc(
+  md: string,
+  opts: { safe?: boolean } = {}
+): { html: string; toc: TocEntry[] } {
+  const html = renderMarkdown(md, opts);
+  const toc: TocEntry[] = [];
+  const seen = new Map<string, number>();
+
+  const withAnchors = html.replace(
+    /<h([1-4])>(.*?)<\/h\1>/g,
+    (_match, levelStr: string, inner: string) => {
+      const level = Number(levelStr);
+      const text = inner.replace(/<[^>]+>/g, "");
+      let id = headingId(text);
+      if (!id) id = `section-${toc.length + 1}`;
+      const count = seen.get(id) ?? 0;
+      seen.set(id, count + 1);
+      if (count > 0) id = `${id}-${count}`;
+      toc.push({ level, text, id });
+      return `<h${level} id="${id}">${inner}</h${level}>`;
+    }
+  );
+
+  return { html: withAnchors, toc };
+}
