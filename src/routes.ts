@@ -59,9 +59,16 @@ export function renderRoutes(app: FastifyInstance, opts: RenderRoutesOpts): void
       }
 
       const { html, toc } = renderWithToc(md, { safe });
-      return reply
-        .status(200)
-        .send({ html, toc, bytes: Buffer.byteLength(html, "utf8") });
+      const words = md.split(/\s+/).filter(Boolean).length;
+      return reply.status(200).send({
+        html,
+        toc,
+        bytes: Buffer.byteLength(html, "utf8"),
+        stats: {
+          words,
+          readingTimeMin: Math.max(1, Math.round(words / 220)),
+        },
+      });
     }
   );
 

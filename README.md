@@ -11,7 +11,6 @@
 ![Tests](https://img.shields.io/badge/tests-21%20passing-brightgreen)
 
 `gfm tables` · `task lists` · `xss-safe` · `full-page mode` · `no browser needed`
-
 </div>
 
 ---
@@ -108,7 +107,5 @@ Built with ⚡ by **v01dst**
 
 [![GitHub](https://img.shields.io/badge/github-v01dst-181717?logo=github)](https://github.com/v01dst)
 [![Discord](https://img.shields.io/badge/discord-9p.1-5865F2?logo=discord&logoColor=white)](https://discord.com/users/9p.1)
-
-*Project 005 / 99 — The Loop*
 
 </div>

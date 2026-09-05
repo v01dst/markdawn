@@ -91,3 +91,28 @@ describe("meta endpoints", () => {
     expect(res.json().service).toBe("markdawn");
   });
 });
+
+describe("render stats", () => {
+  it("includes word count and reading time", async () => {
+    const words = Array(220).fill("word").join(" ");
+    const res = await app.inject({
+      method: "POST",
+      url: "/render",
+      payload: { markdown: `# Title\n\n${words}` },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.stats.words).toBe(221);
+    expect(body.stats.readingTimeMin).toBe(1);
+  });
+
+  it("long documents round up", async () => {
+    const words = Array(450).fill("word").join(" ");
+    const res = await app.inject({
+      method: "POST",
+      url: "/render",
+      payload: { markdown: words },
+    });
+    expect(res.json().stats.readingTimeMin).toBe(2);
+  });
+});
