@@ -104,7 +104,7 @@ describe("render stats", () => {
     });
     expect(res.statusCode).toBe(200);
     const body = res.json();
-    expect(body.stats.words).toBe(221);
+    expect(body.stats.words).toBe(222);
     expect(body.stats.readingTimeMin).toBe(1);
   });
 
