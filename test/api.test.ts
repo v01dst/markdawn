@@ -93,6 +93,8 @@ describe("meta endpoints", () => {
 });
 
 describe("render stats", () => {
+  const app = build();
+  afterAll(() => app.close());
   it("includes word count and reading time", async () => {
     const words = Array(220).fill("word").join(" ");
     const res = await app.inject({

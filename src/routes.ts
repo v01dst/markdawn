@@ -18,14 +18,6 @@ export function renderRoutes(app: FastifyInstance, opts: RenderRoutesOpts): void
       config: { rawBody: true },
       schema: {
         response: {
-          200: {
-            type: "object",
-            properties: {
-              html: { type: "string" },
-              bytes: { type: "number" },
-            },
-            required: ["html", "bytes"],
-          },
           400: errorResponse,
         },
       },
