@@ -16,11 +16,6 @@ export function renderRoutes(app: FastifyInstance, opts: RenderRoutesOpts): void
     "/render",
     {
       config: { rawBody: true },
-      schema: {
-        response: {
-          400: errorResponse,
-        },
-      },
     },
     async (request, reply) => {
       const ct = request.headers["content-type"] ?? "";
